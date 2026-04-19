@@ -4,12 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.util.fastCbrt
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testapp.data.GeoResponseItem
 import com.example.testapp.data.RetrofitInstance
 import com.example.testapp.data.RetrofitInstanceGeo
+import com.example.testapp.data.WeatherResponse
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class WeatherViewModel : ViewModel() {
     var temperature by mutableStateOf("")
@@ -20,11 +23,11 @@ class WeatherViewModel : ViewModel() {
     var name by mutableStateOf("")
     var feels_like by  mutableStateOf("")
     var humidity by mutableStateOf("")
+    var status =0
     fun getWeather(city: String) {
         viewModelScope.launch {
             try {
                 isLoading = true
-
                 val result = RetrofitInstance.api.getWeather(
                     city = city,
                     apiKey = "e5cbf351b4a201a5641006401d4016d1",
@@ -43,6 +46,9 @@ class WeatherViewModel : ViewModel() {
                 } else {
                      if (result.code() == 404) {
                         description = "City not found"
+                         status = result.code()
+                         isLoading = false
+
                      } else {
                         description = "Error: ${result.code()}"
                      }

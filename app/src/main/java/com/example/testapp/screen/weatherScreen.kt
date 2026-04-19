@@ -162,93 +162,93 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel()) {
 
             }
         }
-
         Spacer(modifier = Modifier.height(24.dp))
-
         if (viewModel.isLoading) {
             CircularProgressIndicator()
-
         } else {
-            Box (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Card (
-                    modifier = Modifier.size(240.dp)
+            if(viewModel.status == 404){
+                Column {
+                    Text("City not founded")
+                    viewModel.status = 0
+                }
+            }else{
+                Box (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    if(isloaded){
-                        Column (
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Row {
-                                Text(
-                                    text = viewModel.name,
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.weight(1f)
+                    Card (
+                        modifier = Modifier.size(240.dp)
+                    ) {
+                        if(isloaded){
+                            Column (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 12.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Row {
+                                    Text(
+                                        text = viewModel.name,
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.weight(1f)
                                     )
 
-                                Text(
-                                    text = viewModel.temperature,
-                                    style = MaterialTheme.typography.headlineLarge,
-                                    textAlign = TextAlign.Center
-                                )
+                                    Text(
+                                        text = viewModel.temperature,
+                                        style = MaterialTheme.typography.headlineLarge,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
-                        }
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Divider()
-
-                        Column (
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            weatherInfo.forEach { (key, value) ->
-                                if (key.equals(
-                                        "Country",
-                                        ignoreCase = true
-                                    ) || key.equals("Temperature", ignoreCase = true)
-                                ) {
-                                    return@forEach
-                                } else {
-                                    Column(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalAlignment = Alignment.CenterHorizontally
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Divider()
+                            Column (
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                weatherInfo.forEach { (key, value) ->
+                                    if (key.equals(
+                                            "Country",
+                                            ignoreCase = true
+                                        ) || key.equals("Temperature", ignoreCase = true)
                                     ) {
-                                        Row(
-                                            modifier = Modifier.padding(16.dp)
+                                        return@forEach
+                                    } else {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
-                                            Text(
-                                                text = "${key}: ",
-                                                modifier = Modifier.weight(1f)
-                                            )
-                                            Text(
-                                                text = value
-                                            )
-                                        }
+                                            Row(
+                                                modifier = Modifier.padding(16.dp)
+                                            ) {
+                                                Text(
+                                                    text = "${key}: ",
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                                Text(
+                                                    text = value
+                                                )
+                                            }
 
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }else{
-                        Box (
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column {
-                                Text(text = "Please choose a city")
+                        }else{
+                            Box (
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column {
+                                    Text(text = "Please choose a city")
+                                }
                             }
                         }
                     }
-
-
-
-                }            }
-
+                }
+            }
         }
     }
 }
